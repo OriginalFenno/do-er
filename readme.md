@@ -9,9 +9,7 @@ chime (https://github.com/jarohen/chime)
 -When tasks are created they only leave behind their stop channel - no way to check their state
 -Defaults to UTC rather than local time, which has caught me out on several occasions...
 
-I've thrown my hat into the ring for java-time, and built a small chime-inspired DSL around it. If you
-want to use any of the more advanced java-time predicates, just import it and use them as they come (see
-below).
+I've thrown my hat into the ring for java-time, and built a small chime-inspired DSL around it. If you want to use any of the more advanced java-time predicates, just import it and use them as they come (see below).
 
 ---
 
@@ -21,8 +19,7 @@ First off, create your task pool:
 
 (def mypool (make-task-pool))     ; Plot twist - it's just an empty map in an atom
 
-Then start building your tasks. Successfully-created tasks will return their ids (a keywordized UUID
-if none is provided).
+Then start building your tasks. Successfully-created tasks will return their ids (a keywordized UUID if none is provided).
 
 (add-task {:id :hello-forever
            :task-pool mypool
@@ -39,11 +36,9 @@ This will rapidly become annoying, so:
 (stop-task mypool :hello-forever)
 => true
 
-Note this only stops future triggers, and does not stop any currently-executing task. Stopping a stopped
-task will return nil.
+Note this only stops future triggers, and does not stop any currently-executing task. Stopping a stopped task will return nil.
 
-Tasks that would never execute, i.e. because their entire schedules are in the past, will return
-false on creation and won't be added to the task pool:
+Tasks that would never execute, i.e. because their entire schedules are in the past, will return false on creation and won't be added to the task pool:
 
 (add-task {:id :never-gonna-happen
            :task-pool mypool
@@ -98,14 +93,8 @@ Other examples with the scheduling DSL:
 
 Improvements that aren't necessary for my use case, but that I might get round to one day:
 
-If you schedule a task without a start time, i.e. effective immediately, it may run immediately or it
-may wait for the next scheduled execution
+If you schedule a task without a start time, i.e. effective immediately, it may run immediately or it may wait for the next scheduled execution
 
-When a task finishes running, it will discard any triggers that have elapsed; e.g. if a task starts hourly
-but takes 65 minutes to complete, it will wait 55 minutes before starting again. For me this is
-preferable, but I may add the ability to vary this.
+When a task finishes running, it will discard any triggers that have elapsed; e.g. if a task starts hourly but takes 65 minutes to complete, it will wait 55 minutes before starting again. For me this is preferable, but I may add the ability to vary this.
 
-Schedules are NOT durable, nor are they likely to be. My use case is scheduled data-load applications,
-so I want to have an application trigger a process recurrently and give detailed feedback about both the
-outcome of the task and the state of the schedule (i.e. run count, next run, last successful run,
-current state)
+Schedules are NOT durable, nor are they likely to be. My use case is scheduled data-load applications, so I want to have an application trigger a process recurrently and give detailed feedback about both the outcome of the task and the state of the schedule (i.e. run count, next run, last successful run, current state)
