@@ -8,6 +8,7 @@ overtone.at-at (https://github.com/overtone/at-at)
 chime (https://github.com/jarohen/chime)
 
 +A nice DSL for scheduling; uses core.async in a way that makes sense to me
+
 -When tasks are created they only leave behind their stop channel - no way to check their state
 
 -Defaults to UTC rather than local time, which has caught me out on several occasions...
