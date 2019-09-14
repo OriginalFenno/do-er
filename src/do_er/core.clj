@@ -49,7 +49,7 @@
   (atom {}))
 
 (defn add-task [{:keys [task-pool function schedule on-complete on-error id]
-                 :or {on-complete (fn []) on-error (fn []) id (str (UUID/randomUUID))}}]
+                 :or {on-complete (fn []) on-error (fn []) id (keyword (str (UUID/randomUUID)))}}]
   (let [future-runs (drop-elapsed schedule)
         stop-chan (chan)]
     (if-not (nil? (get @task-pool id))
