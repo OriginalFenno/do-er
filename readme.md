@@ -1,15 +1,18 @@
 A scheduling library, inspired by my favourite features from:
 
 overtone.at-at (https://github.com/overtone/at-at)
+
 +Tasks are added to pools, allowing them to be interrogated at any time
 -Originated in music programming; based around millisecond delays (dates/times only via other libraries)
 
 chime (https://github.com/jarohen/chime)
+
 +A nice DSL for scheduling; uses core.async in a way that makes sense to me
 -When tasks are created they only leave behind their stop channel - no way to check their state
+
 -Defaults to UTC rather than local time, which has caught me out on several occasions...
 
-I've thrown my hat into the ring for java-time, and built a small chime-inspired DSL around it. If you want to use any of the more advanced java-time predicates, just import it and use them as they come (see below).
+I've thrown my hat into the ring for java-time, and built a small chime-inspired DSL around it. If you want to use any of the more advanced java-time predicates, just require it and use them as they come (see below).
 
 ---
 
