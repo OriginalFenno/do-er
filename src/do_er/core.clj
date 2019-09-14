@@ -1,6 +1,5 @@
 (ns do-er.core
   (:require [clojure.core.async :refer [go-loop chan close! alt! >!! timeout]]
-            [do-er.scheduleDSL :refer :all]
             [java-time :as t])
   (:import [java.util UUID]))
 
@@ -88,3 +87,66 @@
   (let [active-tasks (active-tasks pool)]
     (for [task (keys active-tasks)]
       (stop-task pool task))))
+
+(defn- get-int-function [key]
+  (case key :years t/years
+            :months t/months
+            :weeks t/weeks
+            :days t/days
+            :hours t/hours
+            :minutes t/minutes
+            :seconds t/seconds
+            :millis t/millis))
+
+(def weekends t/weekend?)
+(def weekdays t/weekday?)
+
+(def mondays t/monday?)
+(def tuesdays t/tuesday?)
+(def wednesdays t/wednesday?)
+(def thursdays t/thursday?)
+(def fridays t/friday?)
+(def saturdays t/saturday?)
+(def sundays t/sunday?)
+
+(defn today-at
+  ([hours mins]
+   (today-at hours mins 0))
+  ([hours mins secs]
+   (let [today (bean (t/local-date))
+         year (:year today)
+         month (:month today)
+         day (:dayOfMonth today)]
+     (t/local-date-time year month day hours mins secs))))
+
+(defn every
+  ([number interval]
+   (every (t/local-date-time) number interval))
+  ([start number interval]
+   (let [int-function (get-int-function interval)]
+     (iterate #(t/plus % (int-function number)) start))))
+
+(defn in [number interval]
+  (let [int-function (get-int-function interval)]
+    (t/plus (t/local-date-time) (int-function number))))
+
+(defn from [start-time]
+  start-time)
+
+(defn once [date-time]
+  (vector date-time))
+
+(defn until [schedule end-time]
+  (take-while #(t/before? % end-time) schedule))
+
+(defn limit [number schedule]
+  (take number schedule))
+
+(defn only [schedule & predicates]
+  (filter (apply some-fn predicates) schedule))
+
+(defn date [year month day]
+  (t/local-date-time year month day 0 0 0))
+
+(defn date-time [year month date hours minutes seconds]
+  (t/local-date-time year month date hours minutes seconds))
