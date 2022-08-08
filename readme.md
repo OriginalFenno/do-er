@@ -3,6 +3,7 @@ A scheduling library, inspired by my favourite features from:
 overtone.at-at (https://github.com/overtone/at-at)
 
 +Tasks are added to pools, allowing them to be interrogated at any time
+
 -Originated in music programming; based around millisecond delays (dates/times only via other libraries)
 
 chime (https://github.com/jarohen/chime)
