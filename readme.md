@@ -85,9 +85,10 @@ And tasks that run on error, taking the caught exception as an argument:
            :task-pool mypool
            :function #(println (/ 1 0))
            :schedule (once (in 2 :seconds))
-           :on-error (fn [e] (timbre/error (-> e                ; Other logging libraries are available
-                                               Throwable->map
-                                               :cause)))})
+           :on-error (fn [e] (timbre/error     ; Other logging libraries are available
+                               (-> e                
+                                   Throwable->map
+                                   :cause)))})
 => :doomed-to-fail
 19-09-14 13:43:44 MACHINE-NAME ERROR [do-er.core:5] - Divide by zero
 ```
