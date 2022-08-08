@@ -22,13 +22,13 @@ USAGE
 
 First off, create your task pool:
 
-```
+```clojure
 (def mypool (make-task-pool))     ; Plot twist - it's just an empty map in an atom
 ```
 
 Then start building your tasks. Successfully-created tasks will return their ids (a keywordized UUID if none is provided).
 
-```
+```clojure
 (add-task {:id :hello-forever
            :task-pool mypool
            :function #(println "Hello, world")
@@ -42,7 +42,7 @@ Hello, world
 
 This will rapidly become annoying, so:
 
-```
+```clojure
 (stop-task mypool :hello-forever)
 => true
 ```
@@ -51,7 +51,7 @@ Note this only stops future triggers, and does not stop any currently-executing 
 
 Tasks that would never execute, i.e. because their entire schedules are in the past, will return false on creation and won't be added to the task pool:
 
-```
+```clojure
 (add-task {:id :never-gonna-happen
            :task-pool mypool
            :function #(println "Help!")
@@ -64,7 +64,7 @@ Tasks that would never execute, i.e. because their entire schedules are in the p
 
 Note the interaction with java-time. You can also specify tasks that run on completion:
 
-```
+```clojure
 (add-task {:id :send-help
            :task-pool mypool
            :function #(println "Help!")
@@ -80,7 +80,7 @@ Finally, I'm free!
 
 And tasks that run on error, taking the caught exception as an argument:
 
-```
+```clojure
 (add-task {:id :doomed-to-fail
            :task-pool mypool
            :function #(println (/ 1 0))
@@ -95,7 +95,7 @@ And tasks that run on error, taking the caught exception as an argument:
 
 Other examples with the scheduling DSL:
 
-```
+```clojure
 (add-task {:id :hello-briefly
            :task-pool mypool
            :function #(println "Hello, wo...")
@@ -103,7 +103,7 @@ Other examples with the scheduling DSL:
                          (limit 1))})
 ```
 
-```
+```clojure
 (add-task {:id :weekend-worker
            :task-pool mypool
            :function #(println "I need a vacation")
