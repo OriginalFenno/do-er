@@ -22,10 +22,13 @@ USAGE
 
 First off, create your task pool:
 
+```
 (def mypool (make-task-pool))     ; Plot twist - it's just an empty map in an atom
+```
 
 Then start building your tasks. Successfully-created tasks will return their ids (a keywordized UUID if none is provided).
 
+```
 (add-task {:id :hello-forever
            :task-pool mypool
            :function #(println "Hello, world")
@@ -35,16 +38,20 @@ Hello, world
 Hello, world
 Hello, world
 ...
+```
 
 This will rapidly become annoying, so:
 
+```
 (stop-task mypool :hello-forever)
 => true
+```
 
 Note this only stops future triggers, and does not stop any currently-executing task. Stopping a stopped task will return nil.
 
 Tasks that would never execute, i.e. because their entire schedules are in the past, will return false on creation and won't be added to the task pool:
 
+```
 (add-task {:id :never-gonna-happen
            :task-pool mypool
            :function #(println "Help!")
@@ -53,9 +60,11 @@ Tasks that would never execute, i.e. because their entire schedules are in the p
                          (until (java-time/local-date-time 2019 2 1)))
            :on-complete #(println "Finally, I'm free!")})
 => false
+```
 
 Note the interaction with java-time. You can also specify tasks that run on completion:
 
+```
 (add-task {:id :send-help
            :task-pool mypool
            :function #(println "Help!")
@@ -67,9 +76,11 @@ Help!
 Help!
 Help!
 Finally, I'm free!
+```
 
 And tasks that run on error, taking the caught exception as an argument:
 
+```
 (add-task {:id :doomed-to-fail
            :task-pool mypool
            :function #(println (/ 1 0))
@@ -79,20 +90,25 @@ And tasks that run on error, taking the caught exception as an argument:
                                                :cause)))})
 => :doomed-to-fail
 19-09-14 13:43:44 MACHINE-NAME ERROR [do-er.core:5] - Divide by zero
+```
 
 Other examples with the scheduling DSL:
 
+```
 (add-task {:id :hello-briefly
            :task-pool mypool
            :function #(println "Hello, wo...")
            :schedule (-> (every 5 :seconds)
                          (limit 1))})
-           
+```
+
+```
 (add-task {:id :weekend-worker
            :task-pool mypool
            :function #(println "I need a vacation")
            :schedule (-> (every 15 :minutes)
                          (only saturdays sundays)})
+```
 
 ---
 
