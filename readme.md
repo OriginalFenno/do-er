@@ -20,6 +20,10 @@ I've thrown my hat into the ring for java-time, and built a small chime-inspired
 
 USAGE
 
+```
+[org.clojars.tafenton/do-er "1.0.3"]
+```
+
 First off, create your task pool:
 
 ```clojure
