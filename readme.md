@@ -21,7 +21,7 @@ I've thrown my hat into the ring for java-time, and built a small chime-inspired
 USAGE
 
 ```
-[org.clojars.tafenton/do-er "1.0.3"]
+[org.clojars.tafenton/do-er "1.0.4"]
 
 (use 'do-er.core)
 ```
