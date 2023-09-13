@@ -1,4 +1,4 @@
-A scheduling library, inspired by my favourite features from:
+A scheduling library (a general-purpose do-er of things), inspired by my favourite features from:
 
 overtone.at-at (https://github.com/overtone/at-at)
 
@@ -22,6 +22,8 @@ USAGE
 
 ```
 [org.clojars.tafenton/do-er "1.0.3"]
+
+(use 'do-er.core)
 ```
 
 First off, create your task pool:
@@ -51,18 +53,33 @@ This will rapidly become annoying, so:
 => true
 ```
 
-Note this only stops future triggers, and does not stop any currently-executing task. Stopping a stopped task will return nil.
+Note this only stops future triggers, and does not stop any scheduled functions which are currently running. Stopping a stopped task will return nil.
+
+To interrogate your schedules just deref the task pool:
+
+```clojure
+(clojure.pprint/pprint @mypool)
+=> {:hello-forever
+     {:run-count 3
+      :next-run nil
+      :state :stopped
+      :last-completed [java.time.LocalDateTime ... "2023-09-13T10:54:19.147608900"]
+      :stop-chan [clojure.core.async.impl.channels.ManyToManyChannel ...]}}
+```
+
+Of course, if the task was still running then :next-run would be another java.time.LocalDateTime.
+
+---
 
 Tasks that would never execute, i.e. because their entire schedules are in the past, will return false on creation and won't be added to the task pool:
 
 ```clojure
 (add-task {:id :never-gonna-happen
            :task-pool mypool
-           :function #(println "Help!")
+           :function #(println "You won't see this")
            :schedule (-> (every 5 :minutes)
                          (from (java-time/local-date-time 2019 1 1))
-                         (until (java-time/local-date-time 2019 2 1)))
-           :on-complete #(println "Finally, I'm free!")})
+                         (until (java-time/local-date-time 2019 2 1)))})
 => false
 ```
 
@@ -82,7 +99,7 @@ Help!
 Finally, I'm free!
 ```
 
-And tasks that run on error, taking the caught exception as an argument:
+And tasks that run on error, taking the caught exception as an argument (note that do-er will continue to run the function as scheduled, even if it errors every time):
 
 ```clojure
 (add-task {:id :doomed-to-fail
@@ -119,8 +136,8 @@ Other examples with the scheduling DSL:
 
 Improvements that aren't necessary for my use case, but that I might get round to one day:
 
-If you schedule a task without a start time, i.e. effective immediately, it may run immediately or it may wait for the next scheduled execution
+If you schedule a task with a non-specific schedule and no start time, i.e. every 60 seconds effective immediately, it may run immediately OR it may wait for the next scheduled execution.
 
 When a task finishes running, it will discard any triggers that have elapsed; e.g. if a task starts hourly but takes 65 minutes to complete, it will wait 55 minutes before starting again. For me this is preferable, but I may add the ability to vary this.
 
-Schedules are NOT durable, nor are they likely to be. My use case is scheduled data-load applications, so I want to have an application trigger a process recurrently and give detailed feedback about both the outcome of the task and the state of the schedule (i.e. run count, next run, last successful run, current state)
+Schedules are not durable - my use case is small self-contained data-load applications, so I have the luxury of hard-coding the schedule and not having to worry about file system permissions etc.
