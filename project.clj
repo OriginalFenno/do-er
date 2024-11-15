@@ -1,4 +1,4 @@
-(defproject org.clojars.tafenton/do-er "2.0.0-alpha1"
+(defproject org.clojars.tafenton/do-er "2.0.0-alpha2"
   :description "A scheduling library inspired by my favourite bits of chime and overtone.at-at"
   :url "https://github.com/tafenton/do-er"
   :license {:name "Eclipse Public License - v 1.0"

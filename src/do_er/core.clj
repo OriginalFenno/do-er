@@ -44,7 +44,7 @@
             (= state :finished))
       true)))
 
-(defn- drop-elapsed [schedule]
+(defn drop-elapsed [schedule]
   (drop-while #(.isBefore % (LocalDateTime/now)) schedule))
 
 (defn- update-task [pool id new-map]
