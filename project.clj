@@ -1,11 +1,12 @@
-(defproject org.clojars.tafenton/do-er "1.0.4"
+(defproject org.clojars.tafenton/do-er "2.0.0-alpha1"
   :description "A scheduling library inspired by my favourite bits of chime and overtone.at-at"
   :url "https://github.com/tafenton/do-er"
   :license {:name "Eclipse Public License - v 1.0"
             :url "http://www.eclipse.org/legal/epl-v10.html"
             :distribution :repo
             :comments "same as Clojure"}
-  :dependencies [[clojure.java-time "1.1.0"]
-                 [org.clojure/clojure "1.11.1"]
-                 [org.clojure/core.async "1.5.648"]]
+  :dependencies [[com.taoensso/nippy "3.4.2"]
+                 [duratom "0.5.9"]
+                 [org.clojure/clojure "1.12.0"]
+                 [org.clojure/core.async "1.6.681"]]
   :repl-options {:init-ns do-er.core})
